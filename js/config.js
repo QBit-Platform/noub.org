@@ -7,8 +7,8 @@
 */
 
 // --- SUPABASE CONFIGURATION (You MUST replace these with your actual keys) ---
-const SUPABASE_URL = 'https://ryyiejjacfaxrfxeawcw.supabase.co'; 
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ5eWllamphY2ZheHJmeGVhd2N3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2Njc5ODcsImV4cCI6MjA3NTI0Mzk4N30.4AwNsECeQnRRJtnoDldYjQuPoD6OfhkCtgTJ_VJSVc4'; 
+const SUPABASE_URL = 'https://qqrbdynkjroskkkwfpfk.supabase.co'; 
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxcmJkeW5ranJvc2tra3dmcGZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQyNTIxNTUsImV4cCI6MjA3OTgyODE1NX0.It4v8JBAYHTIq2frFgnD1YCrz2WPBmE671yfokMeLuw'; 
 
 // --- ECONOMIC CONSTANTS (TOKENOMICS) ---
 const TOKEN_RATES = {
@@ -60,3 +60,4 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Export all constants and the client
 export { supabaseClient, TOKEN_RATES, ASSET_PATHS, SUPABASE_URL };
+
