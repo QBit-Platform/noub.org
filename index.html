@@ -2,195 +2,317 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Pharaoh's Legacy 'NOUB' v2.0.4 - FIX</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NOUB Hub v0.1 - Pharaoh's Legacy</title>
     
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     
+    <!-- SDKs -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 </head>
 <body>
 
-    <!-- Authentication overlay for login and registration -->
+    <!-- ==========================================================================
+         SECTION 1: AUTHENTICATION LAYER
+         ========================================================================== -->
     <div id="auth-overlay">
         <div class="auth-container">
             <div class="auth-header">
                 <img src="images/noub_logo.png" alt="NOUB Logo" class="auth-logo">
                 <h2>Pharaoh's Legacy</h2>
+                <p class="auth-subtitle">Build. Trade. Rule.</p>
             </div>
+            
+            <!-- Login Form -->
             <div class="auth-form" id="login-form">
                 <h3>Login</h3>
                 <div class="auth-error" id="login-error"></div>
-                <input type="email" id="login-email" placeholder="Email" required>
-                <input type="password" id="login-password" placeholder="Password" required>
-                <button id="login-button">Login</button>
-                <div class="switch-form" onclick="showRegisterForm()">No account? Sign up now</div>
+                <div class="input-group">
+                    <input type="email" id="login-email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="login-password" placeholder="Password" required>
+                </div>
+                <button id="login-button" class="action-button">Enter Kingdom</button>
+                <div class="switch-form" onclick="showRegisterForm()">New Account? Sign Up</div>
             </div>
+            
+            <!-- Register Form -->
             <div class="auth-form hidden" id="register-form">
-                <h3>Create New Account</h3>
+                <h3>Create Account</h3>
                 <div class="auth-error" id="register-error"></div>
-                <input type="text" id="register-username" placeholder="Username" required>
-                <input type="email" id="register-email" placeholder="Email" required>
-                <input type="password" id="register-password" placeholder="Password" required>
-                <button id="register-button">Sign Up</button>
+                <div class="input-group">
+                    <input type="text" id="register-username" placeholder="Your Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="register-email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="register-password" placeholder="Password" required>
+                </div>
+                <button id="register-button" class="action-button">Start Journey</button>
                 <div class="switch-form" onclick="showLoginForm()">Already have an account? Login</div>
             </div>
         </div>
     </div>
 
-    <!-- Main application container -->
+    <!-- ==========================================================================
+         SECTION 2: MAIN APP CONTAINER
+         ========================================================================== -->
     <div id="app-container" class="hidden">
         
+        <!-- 2.1 Header (New Layout: Left Profile, Center NOUB, Right Wallet) -->
         <header>
-            <div class="balance-bar">
-                <div class="currency-display"><img src="images/noub_gold_coin.png" alt="NOUB" class="icon currency-img"> <span id="noub-display">0</span></div>
-                <div id="connectButton" class="ton-connect-btn"></div>
-                <a class="header-profile-btn" data-target="profile-screen">
-                    <img src="images/user_avatar.png" id="header-avatar-img" alt="Profile">
-                </a>
+            <!-- Profile (Left) -->
+            <a class="header-profile-btn" data-target="profile-screen">
+                <img src="images/user_avatar.png" id="header-avatar-img" alt="Profile">
+            </a>
+
+            <!-- Currency (Center) -->
+            <div class="currency-badge">
+                <img src="images/noub_gold_coin.png" alt="NOUB">
+                <span id="noub-display">0</span>
             </div>
+
+            <!-- Wallet (Right) -->
+            <div id="connectButton" class="ton-connect-btn"></div>
         </header>
 
+        <!-- Secondary Resource Bar -->
+        <div class="resource-sub-bar">
+            <div class="res-item"><span class="icon">🐞</span> <span id="header-prestige">0</span></div>
+            <div class="res-item"><span class="icon">☥</span> <span id="header-ankh">0</span></div>
+            <div class="res-item"><span class="icon">🎟️</span> <span id="header-tickets">0</span></div>
+        </div>
+
+        <!-- 2.2 Content Area -->
         <main id="content-container">
             
-            <!-- Home Screen: Main dashboard (v2.0 Layout) -->
+            <!-- SCREEN: HOME (The Dashboard 2x2) -->
             <div id="home-screen" class="screen active">
                 <div class="home-layout">
-                    <div class="home-section">
-                        <h3>Games & Challenges</h3>
+                    
+                    <!-- Top Section: Games (Big Cards) -->
+                    <div class="home-section no-bg">
+                        <h3 class="section-title">Games & Challenges</h3>
                         <div class="home-featured-actions">
-                            <a class="action-card-link" data-target="kv-game-screen"><div class="icon-box large">🗝️</div><span>KV Game</span></a>
-                            <a class="action-card-link" data-target="wheel-screen"><div class="icon-box large">🎡</div><span>Wheel of Fortune</span></a>
+                            <!-- KV Game -->
+                            <a class="action-card-link" data-target="kv-game-screen">
+                                <div class="icon-box large">🗝️</div>
+                                <span>KV Game</span>
+                            </a>
+                            <!-- Idle Drop (Includes Wheel) -->
+                            <a class="action-card-link" data-target="idle-drop-screen">
+                                <div class="icon-box large">🎲</div>
+                                <span>Idle Drop</span>
+                            </a>
                         </div>
                     </div>
-                    <div class="home-section">
-                        <h3>Management & Growth</h3>
-                        <!-- NEW 4x2 GRID - REMOVED IDLE/SWAP AS REQUESTED -->
-                        <div class="home-secondary-actions" style="grid-template-columns: repeat(4, 1fr); max-width: 480px;">
-                            <a class="action-icon-link" data-target="albums-screen"><div class="icon-box">📖</div><span>Albums</span></a>
-                            <a class="action-icon-link" data-target="contracts-screen"><div class="icon-box">📜</div><span>Contracts</span></a>
-                            <a class="action-icon-link" data-target="projects-screen"><div class="icon-box">🏗️</div><span>Projects</span></a>
-                            <a class="action-icon-link" data-target="library-screen"><div class="icon-box">📚</div><span>Library</span></a>
-                            <a class="action-icon-link" data-target="chat-screen"><div class="icon-box">💬</div><span>Chat</span></a>
-                            <a class="action-icon-link" data-target="exchange-screen"><div class="icon-box">💹</div><span>Exchange</span></a>
-                            <!-- Replaced with placeholders to maintain grid structure and allow future re-insertion -->
-                            <a class="action-icon-link" data-target="swap-screen"><div class="icon-box" style="opacity: 0.5;">🤝</div><span>P2P Swap</span></a>
-                            <a class="action-icon-link" data-target="ms-game-screen"><div class="icon-box" style="opacity: 0.5;">🎲</div><span>Idle Drop</span></a>
+
+                    <!-- Bottom Section: Management (2x2 Grid) -->
+                    <div class="home-section no-bg">
+                        <h3 class="section-title">Management & Growth</h3>
+                        <div class="home-grid-actions">
+                            <!-- Market (Swap + Exchange) -->
+                            <a class="action-icon-link" data-target="market-screen">
+                                <div class="icon-box">⚖️</div><span>Market</span>
+                            </a>
+                            <!-- Projects -->
+                            <a class="action-icon-link" data-target="projects-screen">
+                                <div class="icon-box">🏗️</div><span>Projects</span>
+                            </a>
+                            <!-- Chat -->
+                            <a class="action-icon-link" data-target="chat-screen">
+                                <div class="icon-box">💬</div><span>Chat</span>
+                            </a>
+                            <!-- Library -->
+                            <a class="action-icon-link" data-target="library-screen">
+                                <div class="icon-box">📚</div><span>Library</span>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- All other screens -->
-            <div id="collection-screen" class="screen hidden"><h2>My Cards</h2><div class="card-grid" id="collection-container"></div></div>
-            
+            <!-- SCREEN: ECONOMY (Merged: Production + Contracts) -->
             <div id="economy-screen" class="screen hidden">
                 <h2>Economy Hub</h2>
-                <div class="stock-tabs-container">
-                    <button class="stock-tab-btn active" data-stock-tab="production">Production</button>
-                    <button class="stock-tab-btn" data-stock-tab="resources">Resources</button>
-                    <button class="stock-tab-btn" data-stock-tab="materials">Materials</button>
-                    <button class="stock-tab-btn" data-stock-tab="goods">Goods</button>
+                <div class="module-tabs">
+                    <button class="tab-btn active" data-tab="production" onclick="window.switchEconomyTab('production')">Production</button>
+                    <button class="tab-btn" data-tab="contracts" onclick="window.switchEconomyTab('contracts')">Contracts</button>
                 </div>
-                <div id="stock-content-production" class="stock-content-tab active">
-                    <div class="production-section"><h3>Resource Buildings</h3><div class="buildings-grid" id="resources-container"></div></div>
-                    <div class="production-section"><h3>Crafting Workshops</h3><div class="buildings-grid" id="workshops-container"></div></div>
+
+                <!-- Tab 1: Production -->
+                <div id="eco-tab-production" class="eco-content active">
+                    <div class="stock-filter-bar">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="resources">Res</button>
+                        <button class="filter-btn" data-filter="goods">Goods</button>
+                    </div>
+                    <div class="buildings-grid" id="resources-container"></div>
+                    <div class="buildings-grid" id="workshops-container"></div>
+                    <!-- Inventory Grid -->
+                    <div class="stock-grid" id="inventory-grid">
+                        <!-- Items injected by JS -->
+                    </div>
                 </div>
-                <div id="stock-content-resources" class="stock-content-tab"><div id="stock-resources-container" class="stock-grid"></div></div>
-                <div id="stock-content-materials" class="stock-content-tab"><div id="stock-materials-container" class="stock-grid"></div></div>
-                <div id="stock-content-goods" class="stock-content-tab"><div id="stock-goods-container" class="stock-grid"></div></div>
+
+                <!-- Tab 2: Contracts -->
+                <div id="eco-tab-contracts" class="eco-content hidden">
+                    <div class="contracts-section">
+                        <h3>Active Orders</h3>
+                        <div id="active-contracts-container" class="contracts-list"></div>
+                    </div>
+                    <div class="contracts-section">
+                        <h3>Available Orders</h3>
+                        <div id="available-contracts-container" class="contracts-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCREEN: MARKET (Merged: Swap + Exchange) -->
+            <div id="market-screen" class="screen hidden">
+                <h2>The Market</h2>
+                <div id="swap-tabs-container" class="module-tabs">
+                    <button class="swap-tab-btn active" data-swap-tab="browse">Cards</button>
+                    <button class="swap-tab-btn" data-swap-tab="exchange">Exchange</button>
+                    <button class="swap-tab-btn" data-swap-tab="my_requests">Offers</button>
+                    <button class="swap-tab-btn" data-swap-tab="create">Post</button>
+                </div>
+                
+                <div id="swap-content-browse" class="swap-content-tab"></div>
+                <div id="swap-content-exchange" class="swap-content-tab hidden">
+                    <!-- Exchange UI will be injected here -->
+                </div>
+                <div id="swap-content-my_requests" class="swap-content-tab hidden"></div>
+                <div id="swap-content-create" class="swap-content-tab hidden"></div>
+            </div>
+
+            <!-- SCREEN: COLLECTION (Merged: My Cards + Albums) -->
+            <div id="collection-screen" class="screen hidden">
+                <h2>My Museum</h2>
+                <div class="module-tabs">
+                    <button class="tab-btn active" onclick="window.switchCollectionTab('deck')">My Cards</button>
+                    <button class="tab-btn" onclick="window.switchCollectionTab('albums')">Albums</button>
+                </div>
+                
+                <div id="col-tab-deck" class="col-content active">
+                    <div class="card-grid" id="collection-container"></div>
+                </div>
+                
+                <div id="col-tab-albums" class="col-content hidden">
+                    <div id="albums-list-container"></div>
+                </div>
+            </div>
+
+            <!-- SCREEN: IDLE DROP (Merged with Wheel) -->
+            <div id="idle-drop-screen" class="screen hidden">
+                <h2>Royal Vault</h2>
+                <div class="module-tabs">
+                    <button class="tab-btn active" onclick="window.switchIdleTab('vault')">Vault</button>
+                    <button class="tab-btn" onclick="window.switchIdleTab('wheel')">Wheel</button>
+                </div>
+                <div id="idle-tab-vault" class="idle-content active">
+                     <div id="ms-content-drop"></div> <!-- Content from ms_game.js -->
+                </div>
+                <div id="idle-tab-wheel" class="idle-content hidden">
+                     <div id="wheel-screen-content"></div> <!-- Content from wheel.js -->
+                </div>
             </div>
             
-            <div id="tasks-screen" class="screen hidden">
-                <h2>Daily Tasks</h2>
-                <div class="daily-task-summary">
-                    <div id="daily-quests-container"></div>
-                </div>
-            </div>
-            
-            <div id="contracts-screen" class="screen hidden">
-                <h2>Royal Decrees</h2>
-                <div class="contracts-section"><h3>Active Contracts</h3><div id="active-contracts-container" class="contracts-list"></div></div>
-                <div class="contracts-section"><div class="contracts-header"><h3>Available Contracts</h3><button id="refresh-contracts-btn" class="text-button">Refresh</button></div><div id="available-contracts-container" class="contracts-list"></div></div>
-            </div>
-            
-            <div id="albums-screen" class="screen hidden"></div>
-            <div id="card-upgrade-screen" class="screen hidden"></div>
-            <div id="wheel-screen" class="screen hidden"></div>
-            
-            <!-- FIXED: KV Game Content Structure -->
+            <!-- SCREEN: KV GAME -->
             <div id="kv-game-screen" class="screen hidden">
-                <h2>Valley of the Kings - Crack the Code</h2>
-                <div id="kv-game-content" class="game-container">
+                 <!-- Logic injected by kvgame.js -->
+                 <div id="kv-game-content" class="game-container">
                     <div id="kv-game-intro-content">
-                         <h2 style="margin-top: 0; padding-top: 0;"><span id="kv-level-name-display">KV Gate Name</span></h2>
-                         <button id="kv-start-btn" class="action-button small" style="width: 200px;">Load Game</button>
+                         <h2><span id="kv-level-name-display">Gate Loading...</span></h2>
+                         <button id="kv-start-btn" class="action-button">Start Expedition</button>
                     </div>
-                    <div id="kv-game-controls-content" class="game-controls hidden" style="width: 100%;">
-                        <div id="kv-progress-info" class="game-status-message">
-                            <div id="kv-timer-display">Time Left: 0s</div><div id="kv-attempts-display">Attempts Left: 0</div>
+                    <div id="kv-game-controls-content" class="hidden">
+                        <div id="kv-progress-info">
+                            <div id="kv-timer-display">00:00</div>
+                            <div id="kv-attempts-display">Attempts: 0</div>
                         </div>
-                        <div id="kv-message-label" style="margin-bottom: 10px;">Enter the secret code.</div>
-                        <div class="game-input-area" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 14px;">
-                            <input type="number" id="kv-guess-input" style="width: 150px; font-size: 0.9em; text-align: center;" placeholder="Enter code...">
-                        </div>
-                        <ul id="kv-hints-list" style="list-style: none; padding: 0; margin-bottom: 10px; text-align: left; display: flex; flex-direction: column; gap: 3px;"></ul>
+                        <div id="kv-message-label">Enter Code</div>
+                        <input type="number" id="kv-guess-input" placeholder="Code">
                         <div class="kv-controls-grid">
-                            <button id="kv-submit-guess-btn" class="action-button small">Submit</button>
-                            <button id="kv-end-game-btn" class="action-button danger small">End Expedition</button>
+                            <button id="kv-submit-guess-btn" class="action-button small">Unlock</button>
+                            <button id="kv-end-game-btn" class="action-button danger small">Retreat</button>
                         </div>
+                        <ul id="kv-hints-list"></ul>
                     </div>
                 </div>
             </div>
-            
-            <!-- FIXED: Profile Screen Content Container -->
+
+            <!-- SCREEN: TASKS -->
+            <div id="tasks-screen" class="screen hidden">
+                <h2>Tasks & Rewards</h2>
+                <div id="daily-quests-container"></div>
+            </div>
+
+            <!-- SCREEN: PROFILE -->
             <div id="profile-screen" class="screen hidden">
                  <div class="profile-container"></div>
             </div>
             
-            <div id="history-screen" class="screen hidden"></div>
-            <div id="library-screen" class="screen hidden"></div>
-            <div id="settings-screen" class="screen hidden"></div>
-            <div id="activity-screen" class="screen hidden"></div>
-            
-            <div id="exchange-screen" class="screen hidden"><h2>Currency Exchange</h2></div>
-            
+            <!-- SCREEN: CHAT -->
             <div id="chat-screen" class="screen hidden">
-                <h2>Chat with Eve</h2>
+                <h2>Oracle Eve</h2>
                 <div id="chat-messages"></div>
-                <div id="chat-input-area" style="display: flex; flex-direction: column; gap: 7px; margin-top: 7px;">
-                    <input type="text" id="chat-input-field" placeholder="Chat with Eve..." style="flex-grow: 1;">
+                <div id="chat-input-area">
+                    <input type="text" id="chat-input-field" placeholder="Ask Eve...">
                     <button id="chat-send-button" class="action-button small">Send</button>
                 </div>
             </div>
 
+            <!-- SCREEN: ACTIVITY LOG (Merged) -->
+            <div id="activity-screen" class="screen hidden">
+                <h2>Log Book</h2>
+                <div class="module-tabs">
+                    <button class="tab-btn active" onclick="window.switchLogTab('activity')">Activity</button>
+                    <button class="tab-btn" onclick="window.switchLogTab('history')">Games</button>
+                </div>
+                <div id="log-tab-activity" class="log-content active">
+                    <div id="activity-list-container"></div>
+                </div>
+                <div id="log-tab-history" class="log-content hidden">
+                    <div id="history-list-container"></div>
+                </div>
+            </div>
+            
+            <!-- Other Screens -->
+            <div id="settings-screen" class="screen hidden"></div>
+            <div id="library-screen" class="screen hidden"></div>
             <div id="projects-screen" class="screen hidden">
                 <h2>Great Projects</h2>
                 <div id="projects-container"></div>
             </div>
+            <!-- Helper for Exchange module target -->
+            <div id="exchange-screen" class="hidden"></div> 
 
-            <!-- Placeholders for JS to target (Hidden) -->
-            <div id="swap-screen" class="screen hidden"></div>
-            <div id="ms-game-screen" class="screen hidden"></div>
-            
         </main>
         
-        <!-- All modal overlays -->
+        <!-- ==========================================================================
+             SECTION 3: MODALS
+             ========================================================================== -->
+        
         <div id="shop-modal" class="modal-overlay hidden">
             <div class="modal-content">
                 <button class="modal-close-btn" onclick="closeModal('shop-modal')">&times;</button>
                 <h2>Shop</h2>
                 <div class="shop-tabs-container">
-                    <button class="shop-tab-btn active" data-shop-tab="cards">Card Packs</button>
-                    <button class="shop-tab-btn" data-shop-tab="game_items">Game Items</button>
-                    <button class="shop-tab-btn" data-shop-tab="ton_exchange">TON Exchange</button>
+                    <button class="shop-tab-btn active" data-shop-tab="cards">Packs</button>
+                    <button class="shop-tab-btn" data-shop-tab="game_items">Items</button>
+                    <button class="shop-tab-btn" data-shop-tab="ton_exchange">Bank</button>
                 </div>
                 <div id="shop-content-cards" class="shop-content-tab active"><div id="shop-items-cards-container"></div></div>
                 <div id="shop-content-game_items" class="shop-content-tab"><div id="shop-items-game_items-container"></div></div>
@@ -204,58 +326,93 @@
         <div id="card-interaction-modal" class="modal-overlay hidden"></div>
         <div id="specialization-choice-modal" class="modal-overlay hidden"></div>
         <div id="project-detail-modal" class="modal-overlay hidden"></div>
-        
-        <div id="confirmation-modal" class="modal-overlay hidden">
-            <div class="modal-content" style="max-width: 320px; text-align: center;">
-                <h3 id="confirmation-title">Confirm Action</h3>
-                <p id="confirmation-message"></p>
-                <div style="display: flex; gap: 10px;">
-                    <button id="cancel-btn" class="action-button small danger" style="flex: 1;">Cancel</button>
-                    <button id="confirm-btn" class="action-button small" style="flex: 1;">Confirm</button>
-                </div>
-            </div>
-        </div>
+        <div id="card-selector-modal" class="modal-overlay hidden"></div>
+        <div id="accept-selector-modal" class="modal-overlay hidden"></div>
         
         <div id="more-modal" class="modal-overlay hidden">
             <div class="modal-content more-menu">
-                <a class="more-menu-item" data-target="activity-screen"><div class="icon">📝</div><span>Activity Log</span></a>
-                <a class="more-menu-item" data-target="history-screen"><div class="icon">🕒</div><span>Game History</span></a>
+                <a class="more-menu-item" data-target="activity-screen"><div class="icon">📜</div><span>Activity & History</span></a>
                 <a class="more-menu-item" data-target="settings-screen"><div class="icon">⚙️</div><span>Settings</span></a>
                 <button class="modal-close-btn" onclick="closeModal('more-modal')">&times;</button>
             </div>
         </div>
 
-        <div id="visual-effect-container" class="hidden" style="position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 5000; pointer-events: none;">
-            <img id="visual-effect-img" src="" alt="Reward Effect" style="max-width: 80%; max-height: 80%;">
+        <div id="visual-effect-container" class="hidden" style="position: fixed; inset: 0; z-index: 6000; pointer-events: none; display: flex; justify-content: center; align-items: center;">
+            <img id="visual-effect-img" src="" style="max-width: 80%;">
         </div>
     </div>
 
-    <!-- Bottom navigation bar (Finalized) -->
+    <!-- ==========================================================================
+         SECTION 4: 3D NAVIGATION FOOTER
+         ========================================================================== -->
     <nav class="bottom-nav">
-        <a class="nav-item active" data-target="home-screen" title="Home"><div class="icon">🏠</div><span>Home</span></a>
-        <a class="nav-item" data-target="economy-screen" title="Economy Hub"><div class="icon">⛏️</div><span>Economy</span></a>
-        <a class="nav-item" data-target="collection-screen" title="My Cards"><div class="icon">🏛️</div><span>My Cards</span></a>
-        <a class="nav-item" data-target="tasks-screen" title="Tasks"><div class="icon">📜</div><span>Tasks</span></a>
-        <a class="nav-item" id="bottom-shop-btn" title="Shop"><div class="icon">💰</div><span>Shop</span></a>
-        <a class="nav-item" id="more-nav-btn" title="More"><div class="icon">☰</div><span>More</span></a>
+        <a class="nav-item active" data-target="home-screen">
+            <div class="icon">🏛️</div><span>Home</span>
+        </a>
+        <a class="nav-item" data-target="economy-screen">
+            <div class="icon">⛏️</div><span>Economy</span>
+        </a>
+        <a class="nav-item" data-target="collection-screen">
+            <div class="icon">🏺</div><span>My Cards</span>
+        </a>
+        <a class="nav-item" data-target="tasks-screen">
+            <div class="icon">📜</div><span>Tasks</span>
+        </a>
+        <a class="nav-item" id="bottom-shop-btn">
+            <div class="icon">💰</div><span>Shop</span>
+        </a>
+        <a class="nav-item" id="more-nav-btn">
+            <div class="icon">☰</div><span>More</span>
+        </a>
     </nav>
     
-    <script type="module" src="js/main.js?v=202511040101"></script> 
+    <script type="module" src="js/main.js?v=5.0.0"></script> 
+    
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
-                window.Telegram.WebApp.expand(); 
+        // Global Tab Switchers (Attached to Window for HTML onclicks)
+        window.switchEconomyTab = (tabName) => {
+            document.querySelectorAll('#economy-screen .tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`#economy-screen .tab-btn[data-tab="${tabName}"]`).classList.add('active');
+            document.querySelectorAll('.eco-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(`eco-tab-${tabName}`).classList.remove('hidden');
+        };
+        window.switchCollectionTab = (tabName) => {
+            document.querySelectorAll('#collection-screen .tab-btn').forEach(b => b.classList.remove('active'));
+            // Find button by text content for simplicity or index, or add data-tab attribute in HTML above
+            // Better approach: use event target or add data attributes. 
+            // Quick fix: Toggle content visibility
+            document.querySelectorAll('.col-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(`col-tab-${tabName}`).classList.remove('hidden');
+            
+            // Update button style (Generic handler)
+            const buttons = document.querySelectorAll('#collection-screen .tab-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+            if(tabName === 'deck') buttons[0].classList.add('active');
+            if(tabName === 'albums') buttons[1].classList.add('active');
+        };
+        window.switchIdleTab = (tabName) => {
+            document.querySelectorAll('#idle-drop-screen .tab-btn').forEach(b => b.classList.remove('active'));
+            const buttons = document.querySelectorAll('#idle-drop-screen .tab-btn');
+            if(tabName === 'vault') buttons[0].classList.add('active');
+            if(tabName === 'wheel') buttons[1].classList.add('active');
+
+            document.querySelectorAll('.idle-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(`idle-tab-${tabName}`).classList.remove('hidden');
+            
+            // Trigger specific renderers if needed
+            if(tabName === 'wheel') {
+                import('./js/screens/wheel.js').then(m => m.renderWheel());
             }
-            if (window.TON_CONNECT_UI) {
-                const manifestUrl = 'https://raw.githubusercontent.com/sameh-yassin-cairodevelopers/noub_bot/main/tonconnect-manifest.json';
-                
-                window.TonConnectUI = new window.TON_CONNECT_UI.TonConnectUI({
-                    manifestUrl: manifestUrl,
-                    buttonRootId: 'connectButton' 
-                });
-            }
-        });
+        };
+        window.switchLogTab = (tabName) => {
+            document.querySelectorAll('#activity-screen .tab-btn').forEach(b => b.classList.remove('active'));
+            const buttons = document.querySelectorAll('#activity-screen .tab-btn');
+            if(tabName === 'activity') buttons[0].classList.add('active');
+            if(tabName === 'history') buttons[1].classList.add('active');
+
+            document.querySelectorAll('.log-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(`log-tab-${tabName}`).classList.remove('hidden');
+        };
     </script>
 </body>
 </html>
