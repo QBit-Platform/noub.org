@@ -1,59 +1,54 @@
 /* 
  * =================================================================================
- * NOUB PLATFORM - MASTER STYLESHEET (v4.0 Final)
+ * FILE: style.css
+ * VERSION: NOUB Hub v1.0 (Master Release)
+ * DESCRIPTION: The definitive styling architecture for the NOUB platform.
+ * COMPATIBILITY: Fully supports index.html v3.2 (Tabs, Grids, Glassmorphism).
  * =================================================================================
- * Scope: Full Game UI, Hub Interface, Modals, Animations, and Legacy Support.
- * Architecture: Modular CSS (Root -> Core -> Components -> Modules).
  */
 
 /* =================================================================================
-   [1] ROOT VARIABLES (DESIGN TOKENS)
+   [1] DESIGN TOKENS (GLOBAL VARIABLES)
    ================================================================================= */
 :root {
-    /* --- Colors: The Pharaonic Palette --- */
-    --bg-dark: #050505;
-    --bg-panel: #121212;
-    --bg-card: #1a1a1a;
+    /* --- Palette: Pharaonic Cyberpunk --- */
+    --bg-dark: #050505;         /* Main Background */
+    --bg-panel: #141414;        /* Cards & Panels */
     --bg-input: rgba(255, 255, 255, 0.05);
-
-    --color-gold: #D4AF37;
-    --color-gold-dim: #8a7020;
-    --color-gold-light: #f4e7be;
+    
+    --color-gold: #D4AF37;      /* Primary Accent */
+    --color-gold-dim: #8a7020;  /* Shadows/Borders */
     --color-gold-glow: rgba(212, 175, 55, 0.25);
-
-    --color-blue: #00AAB2;
+    
+    --color-blue: #00AAB2;      /* Secondary Accent */
     --color-blue-dim: #005f63;
-
+    
     --color-success: #34c759;
     --color-danger: #ff453a;
-    --color-warning: #ff9f0a;
-
+    
     --text-main: #ffffff;
-    --text-secondary: #a1a1aa;
-    --text-muted: #52525b;
+    --text-sub: #a1a1aa;        /* Secondary Text */
+    --text-muted: #52525b;      /* Disabled/Minor Text */
 
-    /* --- Glassmorphism --- */
+    /* --- Glassmorphism System --- */
     --glass-bg: rgba(15, 15, 15, 0.85);
     --glass-border: 1px solid rgba(255, 255, 255, 0.08);
     --glass-blur: blur(12px);
 
-    /* --- Spacing & Layout --- */
+    /* --- Dimensions & Spacing --- */
     --header-height: 60px;
     --footer-height: 75px;
     --radius-lg: 16px;
     --radius-md: 12px;
     --radius-sm: 8px;
-
-    /* --- Rarity System --- */
-    --rarity-common: #95a5a6;
-    --rarity-rare: #3498db;
-    --rarity-epic: #9b59b6;
-    --rarity-legendary: #f39c12;
-    --rarity-diamond: #f1c40f;
+    
+    /* --- Rarity System Colors --- */
+    --rarity-0: #95a5a6; --rarity-2: #3498db; --rarity-4: #9b59b6; 
+    --rarity-6: #f39c12; --rarity-8: #f1c40f;
 }
 
 /* =================================================================================
-   [2] CORE & RESET
+   [2] RESET & BASE TYPOGRAPHY
    ================================================================================= */
 * {
     box-sizing: border-box;
@@ -66,8 +61,8 @@ body {
     background-color: var(--bg-dark);
     color: var(--text-main);
     margin: 0;
-    /* Vital Padding for Fixed Bars */
-    padding-top: calc(var(--header-height) + 30px); 
+    /* Dynamic Padding for Fixed Bars */
+    padding-top: calc(var(--header-height) + 40px); 
     padding-bottom: calc(var(--footer-height) + 20px);
     padding-left: 10px;
     padding-right: 10px;
@@ -75,101 +70,43 @@ body {
     font-size: 15px;
     overflow-x: hidden;
     
-    /* Background Image */
+    /* Global Background */
     background-image: url('images/bgs/main_bg.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
 }
 
-/* Helper Classes */
+/* Utility Classes */
 .hidden { display: none !important; }
-.active { display: block; } /* Ensures visible elements show */
 
 /* Screen Container Transition */
 .screen {
     width: 100%;
-    max-width: 650px;
+    max-width: 600px;
     margin: 0 auto;
-    animation: fadeInUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: fadeSlideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-@keyframes fadeInUp {
+@keyframes fadeSlideUp {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* Typography */
 h2 {
     color: var(--color-gold);
-    font-size: 1.5em;
+    font-size: 1.4em;
     text-align: center;
     margin-bottom: 20px;
     padding-bottom: 10px;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
 }
-
-h3 {
-    font-size: 1.1em;
-    color: var(--text-secondary);
-    margin-bottom: 15px;
-}
+h3 { font-size: 1.1em; color: var(--text-sub); margin-bottom: 15px; font-weight: 600; }
 
 /* =================================================================================
-   [3] AUTHENTICATION LAYER (Login/Signup)
-   ================================================================================= */
-#auth-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 9999; /* Always on top */
-    background: url('images/bgs/login_bg.png') no-repeat center center/cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #000; /* Fallback */
-}
-
-.auth-container {
-    background: rgba(10, 10, 10, 0.95);
-    border: 1px solid var(--color-gold-dim);
-    padding: 30px 20px;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 360px;
-    text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-}
-
-.auth-header .auth-logo {
-    width: 70px;
-    height: 70px;
-    margin-bottom: 15px;
-    filter: drop-shadow(0 0 8px var(--color-gold));
-}
-
-.auth-header h2 { border-bottom: none; margin-bottom: 5px; }
-.auth-subtitle { color: var(--text-muted); font-size: 0.85em; margin-bottom: 25px; }
-
-.input-group { margin-bottom: 15px; }
-
-input {
-    width: 100%;
-    padding: 12px 15px;
-    background: var(--bg-input);
-    border: 1px solid #333;
-    border-radius: 8px;
-    color: #fff;
-    font-family: inherit;
-    font-size: 0.95em;
-    transition: 0.3s;
-}
-input:focus { border-color: var(--color-gold); background: #000; }
-
-.auth-error { color: var(--color-danger); font-size: 0.8em; min-height: 18px; margin-bottom: 10px; }
-.switch-form { margin-top: 20px; color: var(--color-blue); font-size: 0.9em; text-decoration: underline; cursor: pointer; }
-
-/* =================================================================================
-   [4] HEADER LAYOUT (Glassmorphism)
+   [3] LAYOUT: HEADER (Glassmorphism)
    ================================================================================= */
 header {
     position: fixed;
@@ -182,54 +119,56 @@ header {
     border-bottom: var(--glass-border);
     display: flex;
     align-items: center;
-    padding: 0 15px;
     justify-content: space-between; /* Profile - Badge - Wallet */
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    padding: 0 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
-/* Profile Avatar (Left) */
+/* Left: Profile Avatar */
 .header-profile-btn {
     width: 40px; height: 40px;
     border-radius: 50%;
     border: 2px solid var(--color-gold);
     overflow: hidden;
     cursor: pointer;
-    flex-shrink: 0;
+    box-shadow: 0 0 8px var(--color-gold-dim);
 }
 #header-avatar-img { width: 100%; height: 100%; object-fit: cover; }
 
-/* Currency Badge (Center) */
+/* Center: Currency Badge */
 .currency-badge {
     display: flex; align-items: center; justify-content: center;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.5);
     border: 1px solid var(--color-gold-dim);
     padding: 5px 15px;
     border-radius: 20px;
-    min-width: 120px;
+    min-width: 110px;
 }
 .currency-badge img { width: 20px; height: 20px; margin-right: 6px; }
-.currency-badge span { color: var(--color-gold); font-weight: 700; font-size: 1.1em; }
+.currency-badge span { color: var(--color-gold); font-weight: 800; font-size: 1.1em; }
 
-/* Wallet Button (Right) */
-.ton-connect-btn { width: 40px; height: 40px; flex-shrink: 0; }
+/* Right: Wallet */
+.ton-connect-btn { width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; }
 
-/* Sub-Header Resource Bar */
+/* Sub-Header (Secondary Resources) */
 .resource-sub-bar {
     position: fixed;
     top: var(--header-height); left: 0; right: 0;
-    height: 30px;
-    background: rgba(0,0,0,0.9);
+    height: 35px;
+    background: rgba(10, 10, 10, 0.95);
     border-bottom: 1px solid #222;
     z-index: 900;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
-.res-item { font-size: 0.8em; color: #ccc; display: flex; align-items: center; gap: 5px; }
+.res-item { font-size: 0.85em; color: #ccc; display: flex; align-items: center; gap: 6px; }
+.res-item .icon { font-size: 1.1em; }
 
 /* =================================================================================
-   [5] FOOTER LAYOUT (3D Effect)
+   [4] LAYOUT: FOOTER (3D Navigation)
    ================================================================================= */
 .bottom-nav {
     position: fixed;
@@ -238,7 +177,7 @@ header {
     z-index: 1000;
     background: linear-gradient(to top, #000, #1a1a1a);
     border-top: 1px solid #333;
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.6);
+    box-shadow: 0 -5px 25px rgba(0,0,0,0.8);
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -249,11 +188,8 @@ header {
 
 .nav-item {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-secondary);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: var(--text-sub);
     text-decoration: none;
     font-size: 0.7em;
     cursor: pointer;
@@ -265,7 +201,7 @@ header {
     font-size: 22px;
     margin-bottom: 4px;
     filter: grayscale(1);
-    opacity: 0.7;
+    opacity: 0.6;
     transition: 0.2s;
 }
 
@@ -274,278 +210,206 @@ header {
     filter: grayscale(0);
     opacity: 1;
     transform: translateY(-4px);
-    text-shadow: 0 0 8px var(--color-gold-dim);
+    text-shadow: 0 0 10px var(--color-gold-dim);
 }
 
 /* =================================================================================
-   [6] GLOBAL UI COMPONENTS (Buttons, Tabs, Modals)
+   [5] GLOBAL COMPONENTS (Buttons, Tabs, Modals)
    ================================================================================= */
-
-/* 3D Golden Buttons */
+/* Golden 3D Button */
 .action-button {
-    display: block;
-    width: 100%;
-    padding: 12px 0;
-    margin: 10px auto;
-    border: none;
-    border-radius: 8px;
-    background: linear-gradient(180deg, #e5c558, #d4af37, #b4942d);
-    color: #000;
-    font-weight: 700;
-    font-size: 1em;
-    text-transform: uppercase;
-    cursor: pointer;
+    display: block; width: 100%; max-width: 300px; margin: 15px auto; padding: 12px;
+    border: none; border-radius: 8px;
+    background: linear-gradient(180deg, #E5C558 0%, #D4AF37 50%, #B4942D 100%);
+    color: #000; font-weight: 700; font-size: 1em;
+    text-transform: uppercase; cursor: pointer;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 4px 0 #8a7020, 0 5px 10px rgba(0,0,0,0.5);
     transition: transform 0.1s;
-    max-width: 280px;
 }
-.action-button:active:not(:disabled) {
-    transform: translateY(4px);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 0 0 #8a7020;
-}
-.action-button:disabled {
-    background: #444; color: #777; box-shadow: none; cursor: not-allowed;
-}
+.action-button:active:not(:disabled) { transform: translateY(4px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 0 0 #8a7020; }
+.action-button:disabled { background: #444; color: #888; box-shadow: none; cursor: not-allowed; }
 
-.action-button.small {
-    width: auto; display: inline-block; padding: 6px 14px; font-size: 0.85em; max-width: none;
-}
-.action-button.danger {
-    background: linear-gradient(180deg, #ff6b6b, #ff453a);
-    color: #fff;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 4px 0 #a31810;
-}
-.action-button.danger:active {
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 0 0 #a31810;
-}
+.action-button.small { width: auto; padding: 6px 14px; font-size: 0.85em; display: inline-block; }
+.action-button.danger { background: linear-gradient(180deg, #ff6b6b, #ff453a); color: #fff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 4px 0 #a31810; }
 
-.text-button { background: none; border: none; color: var(--color-blue); cursor: pointer; font-size: 0.9em; }
-
-/* Module Tabs (Economy/Market/Games) */
+/* Module Tabs (The New Hub System) */
 .module-tabs {
-    display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; overflow-x: auto;
+    display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; overflow-x: auto;
 }
 .tab-btn {
     background: transparent; border: 1px solid #444; color: #aaa;
-    padding: 8px 16px; border-radius: 20px; font-size: 0.9em; white-space: nowrap; cursor: pointer;
+    padding: 8px 18px; border-radius: 20px; font-size: 0.9em; white-space: nowrap; cursor: pointer;
+    transition: 0.2s;
 }
 .tab-btn.active {
-    background: var(--color-gold); color: #000; border-color: var(--color-gold); font-weight: bold;
+    background: var(--color-gold); color: #000; font-weight: 700; border-color: var(--color-gold);
 }
 
-/* Filters (Stock) */
-.stock-filter-bar { display: flex; gap: 8px; margin-bottom: 15px; }
-.filter-btn { background: #222; border: none; color: #888; padding: 5px 12px; border-radius: 12px; cursor: pointer; font-size: 0.8em; }
-.filter-btn.active { background: #444; color: #fff; font-weight: bold; }
-
-/* Modal System */
+/* Modals */
 .modal-overlay {
     position: fixed; inset: 0; z-index: 2000;
-    background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+    background: rgba(0,0,0,0.85); backdrop-filter: blur(4px);
     display: flex; justify-content: center; align-items: flex-end;
     opacity: 0; visibility: hidden; transition: 0.3s;
 }
 .modal-overlay:not(.hidden) { opacity: 1; visibility: visible; }
-
 .modal-content {
     background: #151515; width: 100%; max-width: 600px; max-height: 80vh;
-    border-radius: 20px 20px 0 0; padding: 20px; border-top: 3px solid var(--color-gold);
+    border-radius: 20px 20px 0 0; padding: 25px; border-top: 3px solid var(--color-gold);
     overflow-y: auto; transform: translateY(100%); transition: transform 0.3s;
 }
 .modal-overlay:not(.hidden) .modal-content { transform: translateY(0); }
-
-.modal-close-btn {
-    position: absolute; top: 15px; right: 15px; font-size: 24px; color: #888; background: none; border: none; cursor: pointer;
-}
-
-/* Toasts */
-#toast-container {
-    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
-    width: 90%; max-width: 350px; z-index: 5000; pointer-events: none;
-    display: flex; flex-direction: column; gap: 8px;
-}
-.toast {
-    background: rgba(30,30,30,0.95); color: #fff; padding: 12px 15px;
-    border-radius: 8px; font-size: 0.9em; border-left: 4px solid var(--color-blue);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5); animation: slideIn 0.3s;
-}
-.toast.success { border-left-color: var(--color-success); }
-.toast.error { border-left-color: var(--color-danger); }
-
-@keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-close-btn { position: absolute; top: 15px; right: 15px; background: none; border: none; color: #aaa; font-size: 24px; cursor: pointer; }
 
 /* =================================================================================
-   [7] HOME SCREEN MODULE (The Grid)
+   [6] HOME SCREEN (The Hub Grid)
    ================================================================================= */
-.home-layout { display: flex; flex-direction: column; gap: 20px; }
-.home-section { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 15px; border: 1px solid #333; }
-.home-grid-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.home-layout { display: flex; flex-direction: column; gap: 25px; }
+.home-section { background: transparent; border-radius: 12px; padding: 5px; }
+.home-section.no-bg { background: none; border: none; padding: 0; }
 
+/* 6.1 Top Section: Big Cards */
+.home-featured-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.action-card-link {
+    background: linear-gradient(145deg, #1f1f1f, #141414);
+    border: 1px solid #333; border-radius: 16px; padding: 25px 15px;
+    text-align: center; color: #fff; text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: transform 0.2s;
+}
+.action-card-link:active { transform: scale(0.98); }
+.action-card-link .icon-box.large { font-size: 2.5em; margin-bottom: 10px; display: block; }
+
+/* 6.2 Bottom Section: 2x2 Grid */
+.home-grid-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 .action-icon-link {
-    display: flex; flex-direction: column; align-items: center;
-    text-decoration: none; color: #ccc; font-size: 0.8em; cursor: pointer;
+    display: flex; flex-direction: row; align-items: center; justify-content: flex-start;
+    background: rgba(30, 30, 30, 0.8); border: 1px solid #333; border-radius: 12px;
+    padding: 15px; text-decoration: none; color: #ccc; transition: 0.2s;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
 }
-.action-icon-link .icon-box {
-    width: 55px; height: 55px; background: #222; border-radius: 12px;
-    border: 1px solid #333; display: flex; justify-content: center; align-items: center;
-    font-size: 24px; margin-bottom: 5px; transition: 0.2s;
-}
-.action-icon-link:active .icon-box { transform: scale(0.95); border-color: var(--color-gold); }
-.action-card-link .icon-box.large { width: 100%; height: auto; font-size: 2em; display: block; }
+.action-icon-link:active { background: #252525; transform: scale(0.98); }
+.action-icon-link .icon-box { font-size: 1.8em; margin-right: 15px; width: 40px; text-align: center; }
+.action-icon-link span { font-size: 1em; font-weight: 600; color: #fff; }
 
 /* =================================================================================
-   [8] PROFILE MODULE (Grid Layout)
+   [7] PROFILE MODULE (Grid Layout)
    ================================================================================= */
-.profile-container { display: flex; flex-direction: column; gap: 15px; }
 .profile-header {
     display: grid; grid-template-columns: 80px 1fr; gap: 20px; align-items: center;
-    background: var(--bg-panel); padding: 20px; border-radius: 12px; border: 1px solid #333;
+    background: var(--bg-panel); padding: 20px; border-radius: 16px; border: 1px solid #333; margin-bottom: 20px;
 }
 .profile-header .avatar {
     width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--color-gold);
     box-shadow: 0 0 15px var(--color-gold-glow); object-fit: cover;
 }
-.profile-header h2 { margin: 0; font-size: 1.4em; color: #fff; border: none; text-align: left; }
-.profile-header .player-level { color: var(--color-success); font-size: 0.9em; margin-top: 5px; }
+.profile-header h2 { margin: 0; color: #fff; font-size: 1.5em; text-align: left; border: none; padding: 0; }
+.profile-header .player-level { color: var(--color-success); font-size: 0.95em; margin-top: 5px; font-weight: bold; }
 
-.profile-section {
-    background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; border: 1px solid #2a2a2a;
-}
-.profile-section h3 { font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #333; padding-bottom: 5px; }
-
-.profile-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.profile-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .stat-box {
-    background: #151515; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #333;
+    background: #1a1a1a; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #333;
 }
-.stat-box .value { font-size: 1.2em; font-weight: 800; color: #fff; margin-bottom: 4px; display: block; }
-.stat-box .label { font-size: 0.7em; color: var(--text-secondary); text-transform: uppercase; }
+.stat-box .value { font-size: 1.3em; font-weight: 800; color: #fff; margin-bottom: 4px; display: block; }
+.stat-box .label { font-size: 0.75em; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
 
-/* Soul Card Display in Profile */
-.profile-section.soul-active {
-    background: linear-gradient(45deg, rgba(0,0,0,0.6), rgba(212,175,55,0.15));
-    border: 1px solid var(--color-gold);
-    text-align: center;
-}
-
-/* XP Progress */
-.xp-progress-container .progress-bar {
-    background: #000; height: 10px; border-radius: 5px; border: 1px solid #333; overflow: hidden;
-}
+/* XP Bar */
+.xp-progress-container .progress-bar { background: #000; height: 12px; border-radius: 6px; border: 1px solid #333; overflow: hidden; }
 .xp-progress-container .progress-bar-inner { background: var(--color-success); height: 100%; }
 
 /* =================================================================================
-   [9] ECONOMY & FACTORIES
+   [8] ECONOMY & PRODUCTION
    ================================================================================= */
-.buildings-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-bottom: 20px;
-}
-.building-card {
-    background: var(--bg-panel); border: 1px solid #333; border-radius: 10px; padding: 10px; text-align: center;
-}
-.building-card img {
-    width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; border: 1px solid #444; margin-bottom: 5px;
-}
-.building-card h4 { font-size: 0.9em; margin: 5px 0; height: 32px; overflow: hidden; }
+.stock-filter-bar { display: flex; gap: 10px; margin-bottom: 15px; }
+.filter-btn { background: #222; border: 1px solid #333; color: #aaa; padding: 6px 14px; border-radius: 15px; font-size: 0.8em; }
+.filter-btn.active { background: #444; color: #fff; font-weight: bold; border-color: #666; }
+
+.buildings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.building-card { background: var(--bg-panel); border: 1px solid #333; border-radius: 12px; padding: 10px; text-align: center; }
+.building-card img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; border: 1px solid #444; margin-bottom: 5px; }
+.building-card.unlockable { border: 2px solid var(--color-success); box-shadow: 0 0 10px rgba(52,199,89,0.2); }
 .building-card.locked { opacity: 0.5; filter: grayscale(1); border-style: dashed; }
-.building-card.unlockable { border: 2px solid var(--color-success); }
 
-.stock-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; }
-.stock-item { background: #222; border: 1px solid #333; border-radius: 8px; padding: 8px; text-align: center; }
-.stock-item img { width: 40px; height: 40px; }
-.stock-item .quantity { color: var(--color-blue); font-weight: bold; }
-
-/* Production Modal */
-.prod-modal-header { text-align: center; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 15px; }
-.prod-modal-header img { width: 80px; height: 80px; border-radius: 10px; border: 2px solid var(--color-gold); }
-.prod-io {
-    display: flex; justify-content: space-around; align-items: center;
-    background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin: 15px 0;
-}
-.prod-item img { width: 40px; height: 40px; }
-.expert-card { background: #222; padding: 10px; border-radius: 8px; border: 1px solid var(--color-gold); display: flex; align-items: center; gap: 10px; }
+/* Production Modal Details */
+.prod-modal-header img { width: 80px; height: 80px; border-radius: 12px; border: 2px solid var(--color-gold); margin-bottom: 10px; }
+.prod-io { display: flex; justify-content: space-around; align-items: center; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; margin: 15px 0; }
+.expert-card { background: #222; padding: 10px; border-radius: 8px; border: 1px solid var(--color-gold); display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 10px; }
 
 /* =================================================================================
-   [10] COLLECTION (Cards)
+   [9] COLLECTION & SOUL CARD
    ================================================================================= */
-.card-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px;
-}
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; }
 .card-stack {
     position: relative; background: #1a1a1a; border-radius: 8px; padding: 6px;
     border: 2px solid transparent; text-align: center; cursor: pointer;
 }
 .card-stack img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; }
-.card-stack h4 { font-size: 0.8em; margin: 5px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-stack h4 { font-size: 0.8em; margin: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* Rarity Borders */
-.card-stack[data-rarity="2"] { border-color: var(--rarity-rare); }
-.card-stack[data-rarity="4"] { border-color: var(--rarity-epic); }
-.card-stack[data-rarity="6"] { border-color: var(--rarity-legendary); box-shadow: 0 0 10px var(--rarity-legendary); }
+/* Rarity */
+.card-stack[data-rarity="2"] { border-color: var(--rarity-2); }
+.card-stack[data-rarity="4"] { border-color: var(--rarity-4); }
+.card-stack[data-rarity="6"] { border-color: var(--rarity-6); box-shadow: 0 0 10px var(--rarity-6); }
 
-/* Soul Card Special */
+/* THE SOUL CARD (Special Effect) */
 .soul-card {
     background: linear-gradient(135deg, #000, #1a1a1a);
     border: 2px solid var(--color-gold) !important;
     box-shadow: 0 0 20px var(--color-gold-glow);
-    animation: pulseGold 4s infinite;
-    order: -1; /* Always first */
+    animation: pulseGold 4s infinite ease-in-out;
+    order: -1; /* Force first position in grid */
 }
-.soul-card .soul-glow { position: absolute; inset: 0; pointer-events: none; }
+.soul-card .soul-glow { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%); }
 @keyframes pulseGold {
-    0%, 100% { box-shadow: 0 0 10px var(--color-gold-dim); }
+    0% { box-shadow: 0 0 10px var(--color-gold-dim); border-color: #b8860b; }
     50% { box-shadow: 0 0 25px var(--color-gold); border-color: #fff; }
+    100% { box-shadow: 0 0 10px var(--color-gold-dim); border-color: #b8860b; }
 }
-
-/* Albums */
-.album-list-item {
-    background: var(--bg-panel); padding: 15px; border-radius: 10px; margin-bottom: 10px;
-    display: flex; align-items: center; border-left: 4px solid var(--color-gold);
-}
-.album-list-item.completed { border-left-color: var(--color-success); }
 
 /* =================================================================================
-   [11] MARKET & SWAP
+   [10] MARKET & TRADE
    ================================================================================= */
 .swap-request-card {
     background: var(--bg-panel); border: 1px solid #444; border-radius: 12px; padding: 15px; margin-bottom: 15px;
 }
 .trade-display-wrapper { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; }
-.trade-card-item { width: 40%; text-align: center; }
+.trade-card-item { width: 42%; text-align: center; }
 .trade-card-item img { width: 60px; height: 60px; border-radius: 8px; border: 1px solid #555; object-fit: cover; }
 .trade-icon { font-size: 1.5em; color: var(--color-blue); }
-
-.trade-visual-box {
-    background: #1a1a1a; border: 1px solid #444; border-radius: 12px; padding: 15px;
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
-}
-.card-slot { border: 1px dashed #555; border-radius: 8px; padding: 10px; min-height: 60px; display: flex; align-items: center; justify-content: center; width: 100%; font-size: 0.8em; }
+/* Create UI */
+.trade-visual-box { background: #1a1a1a; border: 1px solid #444; border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.card-slot { border: 1px dashed #555; border-radius: 8px; padding: 10px; min-height: 70px; display: flex; align-items: center; justify-content: center; width: 100%; font-size: 0.85em; flex-direction: column; }
 
 /* =================================================================================
-   [12] GAMES & CHAT
+   [11] AUTH & UTILS
    ================================================================================= */
-.game-container {
-    text-align: center; padding: 20px; background: radial-gradient(circle, #1f1f1f, #0a0a0a);
-    border-radius: 16px; border: 1px solid #333; margin-bottom: 20px;
+.input-group { margin-bottom: 15px; }
+input { 
+    width: 100%; padding: 12px 15px; background: var(--bg-input); border: 1px solid #333;
+    border-radius: 8px; color: #fff; font-family: inherit; transition: 0.3s;
 }
-.kv-hint-item { background: rgba(0,0,0,0.3); padding: 8px; border-left: 3px solid var(--color-blue); text-align: left; margin-bottom: 5px; }
+input:focus { border-color: var(--color-gold); background: #000; }
 
-/* Chat */
-#chat-messages { height: 300px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-bottom: 10px; }
-.eve-bubble { background: #222; padding: 8px 12px; border-radius: 12px; margin-bottom: 8px; max-width: 85%; border-left: 3px solid var(--color-blue); }
-.user-bubble { background: #333; padding: 8px 12px; border-radius: 12px; margin-bottom: 8px; max-width: 85%; margin-left: auto; border-right: 3px solid var(--color-gold); text-align: right; }
-#chat-input-area { display: flex; gap: 10px; }
+/* Toast Notification */
+#toast-container { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 350px; z-index: 5000; pointer-events: none; display: flex; flex-direction: column; gap: 10px; }
+.toast { 
+    background: rgba(30, 30, 30, 0.95); border: 1px solid #444; border-left: 4px solid var(--color-blue); color: #fff;
+    padding: 12px 20px; border-radius: 50px; font-size: 0.9em; box-shadow: 0 5px 20px rgba(0,0,0,0.5); text-align: center; animation: fadeIn 0.3s;
+}
+.toast.success { border-left-color: var(--color-success); }
+.toast.error { border-left-color: var(--color-danger); }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
 /* =================================================================================
-   [13] RTL SUPPORT
+   [12] RTL SUPPORT
    ================================================================================= */
 [dir="rtl"] body { direction: rtl; text-align: right; }
 [dir="rtl"] .profile-header { grid-template-columns: 1fr 80px; }
 [dir="rtl"] .header-profile-btn { margin-right: 0; margin-left: 10px; }
 [dir="rtl"] .toast { border-left: 1px solid #444; border-right: 4px solid var(--color-blue); }
 [dir="rtl"] .quest-action { text-align: left; }
-[dir="rtl"] .nav-item { direction: ltr; } /* Keep icons generic or flip if needed */
 [dir="rtl"] .trade-icon { transform: scaleX(-1); }
+[dir="rtl"] .action-icon-link { flex-direction: row-reverse; justify-content: flex-end; }
+[dir="rtl"] .action-icon-link .icon-box { margin-right: 0; margin-left: 15px; }
 
-/* =================================================================================
-   END OF STYLE
-   ================================================================================= */
+/* END OF FILE */
